@@ -45,7 +45,7 @@ class TAPDevice : NSObject {
     private(set) var isReady : Bool = false {
         willSet {
             if self.isReady == false && newValue == true {
-                TAPKit.log.event(.info, message: "TAP \(self.identifier.uuidString),\(self.name) is ready to use!")
+                TAPKit.log.event(.info, message: "TAP \(self.identifier.uuidString),\(self.name ?? "NO_NAME_SET") is ready to use!")
                 self.writeMode()
                 self.delegate?.TAPIsReady(identifier: self.identifier.uuidString, name:self.name, fw: self.fw)
             }
