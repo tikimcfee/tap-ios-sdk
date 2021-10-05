@@ -11,7 +11,8 @@ import TAPKit
 
 class ViewController: UIViewController {
 	
-	private let tapDelegate = StartingTapDelegate()
+	private lazy var tapDelegate: TAPKitDelegate = makeTestDelegate()
+	
 	private let circlesView = FingerCirclesView()
 	
     override func viewDidLoad() {
@@ -30,14 +31,7 @@ class ViewController: UIViewController {
 			circlesView.topAnchor.constraint(equalTo: view.topAnchor),
 			circlesView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
 		])
-		
-		startTest()
     }
-	
-	func startTest() {
-		circlesView.displayFingers([Fingers.allCases.randomElement()!, Fingers.allCases.randomElement()!])
-		DispatchQueue.main.asyncAfter(deadline: .now() + 1.0, execute: startTest)
-	}
     
     override func viewWillDisappear(_ animated: Bool) {
         TAPKit.sharedKit.removeDelegate(tapDelegate)
@@ -45,6 +39,19 @@ class ViewController: UIViewController {
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
     }
+	
+	func TEST__flashRandomFingers() {
+		circlesView.displayFingers([Fingers.allCases.randomElement()!, Fingers.allCases.randomElement()!])
+		DispatchQueue.main.asyncAfter(deadline: .now() + 1.0, execute: TEST__flashRandomFingers)
+	}
+	
+	private func makeTestDelegate() -> TAPKitDelegate {
+		let delegate = StartingTapDelegate()
+		delegate.tapUpdates = { [weak circlesView] fingers in
+			circlesView?.displayFingers(fingers)
+		}
+		return delegate	
+	}
 }
 
 typealias TapUpdates = ([Fingers]) -> Void
