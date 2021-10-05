@@ -8,24 +8,37 @@
 
 import Foundation
 
-public enum Fingers: Int, CustomStringConvertible {
+public enum Fingers: Int, CustomStringConvertible, CaseIterable {
 	case thumb = 0
 	case index
 	case middle
 	case ring
 	case pinky
 	
+	public static var set: Set<Fingers> = Set(Fingers.allCases)
+	
 	public static func fromIntCombination(_ combination: UInt8) -> [Fingers] {
 		TAPCombination
 			.computeTapStatesFromBinarySequence(combination)
 			.enumerated()
-			.reduce(into: []) { result, tuple in 
-				if tuple.element,
-				   let parsed = Fingers(rawValue: tuple.offset) {
-					result.append(parsed)
-				}
+			.reduce(into: []) { result, offsetAndTapState in
+				guard let parsed = Fingers(rawValue: offsetAndTapState.offset),
+					  offsetAndTapState.element
+				else { return }
+				result.append(parsed)
 			}
 	}
+	
+//	private static func from(offset: Int) -> Fingers? {
+//		switch offset { 
+//			case 0: return .thumb
+//			case 1: return .index
+//			case 2: return .middle
+//			case 3: return .ring
+//			case 4: return .pinky
+//			default: return nil
+//		}
+//	}
 	
 	public var description: String {
 		switch self {
