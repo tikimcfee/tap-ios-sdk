@@ -8,6 +8,36 @@
 
 import Foundation
 
+public enum Fingers: Int, CustomStringConvertible {
+	case thumb = 0
+	case index
+	case middle
+	case ring
+	case pinky
+	
+	public static func fromIntCombination(_ combination: UInt8) -> [Fingers] {
+		TAPCombination
+			.computeTapStatesFromBinarySequence(combination)
+			.enumerated()
+			.reduce(into: []) { result, tuple in 
+				if tuple.element,
+				   let parsed = Fingers(rawValue: tuple.offset) {
+					result.append(parsed)
+				}
+			}
+	}
+	
+	public var description: String {
+		switch self {
+			case .thumb: return "Thumb"
+			case .index: return "Index"
+			case .middle: return "Middle"
+			case .ring: return "Ring"
+			case .pinky: return "Pinky"
+		}
+	}
+}
+
 @objc public class TAPCombination : NSObject {
     override private init() {
         super.init()
@@ -25,56 +55,12 @@ import Foundation
         }
         return res
     }
-    
-    @objc public static func toFingerNumbers (_ combination : UInt8) -> [UInt8] {
-        var res : [UInt8] = [UInt8]()
-        for i in (UInt8(0)..<UInt8(5)).reversed() {
-            if (combination & (0b1 << i) > 0) {
-                res.insert(i+1, at: 0)
-            }
-        }
-        return res
-    }
-    
-    @objc public static func combinationSpeakableString(for combination:UInt8) -> String {
 
-        var str : String = ""
-        let fingers = TAPCombination.toFingerNumbers(combination)
-        let allFingers : Bool = fingers.elementsEqual([1,2,3,4,5])
-        if (allFingers) {
-            str = "all fingers"
-        } else {
-            str = fingers.count == 1 ? "Finger; " : "Fingers; "
-            for i in 0..<fingers.count {
-                let current = fingers[i]
-                str += String(current) + " "
-                if (i == fingers.count - 2) {
-                    str += " And "
-                } else if (i < fingers.count-2) {
-                    str += "; "
-                }
-            }
-        }
-        return str
-
-    }
-    
-    @objc public static func toFingers(_ combination:UInt8) -> [Bool] {
+    @objc public static func computeTapStatesFromBinarySequence(_ combination:UInt8) -> [Bool] {
         return [combination & 0b00001 > 0, 
 				combination & 0b00010 > 0, 
 				combination & 0b00100 > 0, 
 				combination & 0b01000 > 0, 
 				combination & 0b10000 > 0]
-    }
-    
-    @objc public static func fingerName(_ finger:Int) -> String {
-        switch finger {
-        case 0 : return "Thumb"
-        case 1 : return "Index"
-        case 2 : return "Middle"
-        case 3 : return "Ring"
-        case 4 : return "Pinky"
-        default : return ""
-        }
     }
 }

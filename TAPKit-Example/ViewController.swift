@@ -106,30 +106,9 @@ extension ViewController : TAPKitDelegate {
     
     func tapped(identifier: String, combination: UInt8) {
         // Called when a user tap, only when the TAP device is in controller mode.
-        print("TAP \(identifier) tapped combination: \(combination)")
-        
-        // Combination is a 8-bit unsigned number, between 1 and 31.
-        // It's binary form represents the fingers that are tapped.
-        // The LSB is thumb finger, the MSB (bit number 5) is the pinky finger.
-        // For example: if combination equls 3 - it's binary form is 00101,
-        // Which means that the thumb and the middle fingers are tapped.
-        // For your convenience, you can convert the binary format into fingers boolean array, while:
-        // fingers[0] indicates if the thumb is being tapped.
-        // fingers[1] indicates if the index finger is being tapped.
-        // fingers[2] indicates if the middle finger is being tapped.
-        // fingers[3] indicates if the ring finger is being tapped.
-        // fingers[4] indicates if the pinky finger is being tapped.
-        
-        let fingers = TAPCombination.toFingers(combination)
-        
-        // For printing :
-        var fingersString = ""
-        for i in 0..<fingers.count {
-            if fingers[i] {
-                fingersString.append(TAPCombination.fingerName(i) + " ")
-            }
-        }
-        print("---combination fingers : \(fingersString)")
+        print("TAP \(identifier) tapped combination: \(combination)")        
+		let lugoFingers = Fingers.fromIntCombination(combination)
+		print("+++ lugo says: \(lugoFingers)")
     }
     
     func tapDisconnected(withIdentifier identifier: String) {
@@ -158,13 +137,7 @@ extension ViewController : TAPKitDelegate {
         // Since iOS doesn't support mouse - You can implement it in your app using the parameters of this function.
         // velocityX : get the amount of movement for X-axis.
         // velocityY : get the amount of movement for Y-axis.
-        // Important:
-        //   You may want to multiply/divide velocityX and velocityY by a constant number to your liking, in order to enhance the mouse movement to match your expectation in your app.
-        //   So, basically, by multiplying/dividing the velocityX and velocityY by a constant you can implement a "mouse sensitivity" feature that will be used in your app.
-        //   For example: if you have an object responding to mouse object, like written below, then muliplying the velocityX and velocityY by 2 will make the object move
-        //   twice as fast.
-        
-        // Example: Moving the mouse image :
+		
         if (isMouse) {
             let newPoint = CGPoint(x: self.mouse.frame.origin.x + CGFloat(velocityX), y: self.mouse.frame.origin.y + CGFloat(velocityY))
             var dx : CGFloat = 0
