@@ -8,6 +8,7 @@
 
 import UIKit
 import TAPKit
+import AppKit
 
 class ViewController: UIViewController {
 	
@@ -36,9 +37,21 @@ class ViewController: UIViewController {
     override func viewWillDisappear(_ animated: Bool) {
         TAPKit.sharedKit.removeDelegate(tapDelegate)
     }
+	
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
     }
+	
+	func TEST__rawMode() {
+//		let inputMode = TAPInputMode.rawSensor(
+//			sensitivity: TAPRawSensorSensitivity(
+//				deviceAccelerometer: 0, 
+//				imuGyro: 0, 
+//				imuAccelerometer: 0
+//			)
+//		)
+//		TAPKit.sharedKit.setDefaultTAPInputMode(inputMode, immediate: true)
+	}
 	
 	func TEST__flashRandomFingers() {
 		circlesView.displayFingers([Fingers.allCases.randomElement()!, Fingers.allCases.randomElement()!])
@@ -47,10 +60,18 @@ class ViewController: UIViewController {
 	
 	private func makeTestDelegate() -> TAPKitDelegate {
 		let delegate = StartingTapDelegate()
-		delegate.tapUpdates = { [weak circlesView] fingers in
-			circlesView?.displayFingers(fingers)
+		delegate.tapUpdates = { [weak self] fingers in
+			self?.enqueueUpdate(fingers)
 		}
 		return delegate	
+	}
+	
+	private func enqueueUpdate(_ fingers: [Fingers]) {
+		DispatchQueue.global(qos: .userInitiated).async { [weak circlesView, fingers] in 
+			DispatchQueue.main.async {
+				circlesView?.displayFingers(fingers)
+			}
+		}
 	}
 }
 
@@ -61,7 +82,7 @@ class StartingTapDelegate: TAPKitDelegate {
 	var tapUpdates: TapUpdates?
 	
 	func centralBluetoothState(poweredOn: Bool) {
-		print("Bluetooth state changed: poweredOn=\(poweredOn)")
+		print("Bluetooth state changed: powerxeeaaareedOn=\(poweredOn)")
 	}
 	
 	func tapped(identifier: String, combination: UInt8) {

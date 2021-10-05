@@ -46,7 +46,6 @@ import Foundation
     case Device = 2
 }
 
-
 @objc public class RawSensorData : NSObject {
 
     @objc public static let iIMU_GYRO = 0
