@@ -9,10 +9,24 @@
 import UIKit
 import TAPKit
 
+enum Ordering { 
+	case thumbOnRight, thumbOnLeft
+	var fingers: [Fingers] { 
+		switch self {
+			case .thumbOnLeft:
+				return [.thumb, .index, .middle, .ring, .pinky]
+			case .thumbOnRight:
+				return [.pinky, .ring, .middle, .index, .thumb]
+		}
+	}
+}
+
 class FingerCirclesView: UIView {
-	
+
 	private lazy var stack: UIStackView = makeStackView()
 	private lazy var circles: [Fingers: UIView] = makeCirclesDictionary()
+
+	var ordering: Ordering = .thumbOnRight
 	
 	init() {
 		super.init(frame: .zero)
@@ -45,7 +59,7 @@ class FingerCirclesView: UIView {
 		translatesAutoresizingMaskIntoConstraints = false
 		
 		addSubview(stack)
-		Fingers.allCases.forEach { finger in
+		ordering.fingers.forEach { finger in
 			guard let view = circles[finger] else { return }
 			stack.addArrangedSubview(view)
 			
@@ -61,6 +75,8 @@ class FingerCirclesView: UIView {
 			stack.topAnchor.constraint(equalTo: topAnchor),
 			stack.bottomAnchor.constraint(equalTo: bottomAnchor),
 		])
+		
+		displayFingers([])
 	}
 	
 	func displayFingers(_ newTaps: [Fingers]) {
@@ -97,7 +113,7 @@ extension FingerCirclesView {
 	}
 	
 	func makeCirclesDictionary() -> [Fingers: UIView] {
-		Fingers.allCases.reduce(into: [:]) { result, finger in 
+		ordering.fingers.reduce(into: [:]) { result, finger in 
 			result[finger] = makeCircleView()
 		}
 	}
