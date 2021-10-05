@@ -19,14 +19,7 @@ import Foundation
         self.z = 0
         super.init()
     }
-    
-//    public init(x:Int16, y:Int16, z:Int16) {
-//        self.x = x
-//        self.y = y
-//        self.z = z
-//        super.init()
-//    }
-    
+	
     public init?(arr:[UInt8], sensitivityFactor:Double) {
         guard arr.count == 6 else { return nil }
         let x_i : Int16 = Int16(arr[1]) << 8 | Int16(arr[0])
@@ -51,7 +44,6 @@ import Foundation
     case None = 0
     case IMU = 1
     case Device = 2
-    
 }
 
 

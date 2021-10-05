@@ -66,7 +66,7 @@ import Foundation
             }
         }
         let bytes : [UInt8] = [0x3,0xc,0x0,modeValue] + sensitivityArray
-        let d = Data.init(bytes: bytes)
+        let d = Data(bytes)
         return d
     }
     

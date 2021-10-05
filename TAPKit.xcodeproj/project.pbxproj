@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		452D5A50270BD30000F2AB9D /* FingerCirclesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 452D5A4F270BD30000F2AB9D /* FingerCirclesView.swift */; };
 		5310518923E997090028ABCF /* RawSensorData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5310518823E997090028ABCF /* RawSensorData.swift */; };
 		5310518B23E9971A0028ABCF /* RawSensorDataParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5310518A23E9971A0028ABCF /* RawSensorDataParser.swift */; };
 		5329B3B523EADF11007C2B90 /* TAPRawSensorSensitivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5329B3B423EADF11007C2B90 /* TAPRawSensorSensitivity.swift */; };
@@ -94,6 +95,7 @@
 
 /* Begin PBXFileReference section */
 		452D5A4D270BC89300F2AB9D /* TAPKit-Example.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "TAPKit-Example.entitlements"; sourceTree = "<group>"; };
+		452D5A4F270BD30000F2AB9D /* FingerCirclesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FingerCirclesView.swift; sourceTree = "<group>"; };
 		5310518823E997090028ABCF /* RawSensorData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RawSensorData.swift; sourceTree = "<group>"; };
 		5310518A23E9971A0028ABCF /* RawSensorDataParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RawSensorDataParser.swift; sourceTree = "<group>"; };
 		5310518D23E9A69D0028ABCF /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
@@ -158,6 +160,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		452D5A4E270BD13700F2AB9D /* LugoCode */ = {
+			isa = PBXGroup;
+			children = (
+				452D5A4F270BD30000F2AB9D /* FingerCirclesView.swift */,
+			);
+			path = LugoCode;
+			sourceTree = "<group>";
+		};
 		5310518723E31D650028ABCF /* RawSensorData */ = {
 			isa = PBXGroup;
 			children = (
@@ -266,6 +276,7 @@
 				452D5A4D270BC89300F2AB9D /* TAPKit-Example.entitlements */,
 				53B1A13E207A58ED00025C59 /* AppDelegate.swift */,
 				53B1A140207A58ED00025C59 /* ViewController.swift */,
+				452D5A4E270BD13700F2AB9D /* LugoCode */,
 				53B1A142207A58ED00025C59 /* Main.storyboard */,
 				53B1A145207A58ED00025C59 /* Assets.xcassets */,
 				53B1A147207A58ED00025C59 /* LaunchScreen.storyboard */,
@@ -392,11 +403,12 @@
 				TargetAttributes = {
 					532EB66220624D9F00B7B8BD = {
 						CreatedOnToolsVersion = 9.2;
-						LastSwiftMigration = 0920;
+						LastSwiftMigration = 1300;
 						ProvisioningStyle = Manual;
 					};
 					53B1A13B207A58ED00025C59 = {
 						CreatedOnToolsVersion = 9.2;
+						LastSwiftMigration = 1300;
 						ProvisioningStyle = Automatic;
 					};
 					53D550C823FDB7DF0029474D = {
@@ -478,6 +490,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				53B1A141207A58ED00025C59 /* ViewController.swift in Sources */,
+				452D5A50270BD30000F2AB9D /* FingerCirclesView.swift in Sources */,
 				53B1A13F207A58ED00025C59 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -678,7 +691,7 @@
 				SUPPORTS_MACCATALYST = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -709,7 +722,7 @@
 				SKIP_INSTALL = YES;
 				SUPPORTS_MACCATALYST = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
@@ -734,7 +747,7 @@
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SUPPORTS_MACCATALYST = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "TAPKit-iOS/Common/bridge-header.h";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -758,7 +771,7 @@
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SUPPORTS_MACCATALYST = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "TAPKit-iOS/Common/bridge-header.h";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;

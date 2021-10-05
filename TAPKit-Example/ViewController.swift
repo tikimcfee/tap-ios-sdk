@@ -12,8 +12,10 @@ import TAPKit
 class ViewController: UIViewController {
 
     @IBOutlet weak var mouse: UIImageView!
+	
     private var devCount = 0
-    private var imuCount = 0;
+    private var imuCount = 0
+	
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -217,9 +219,4 @@ extension ViewController : TAPKitDelegate {
     func tapChangedAirGesturesState(identifier: String, isInAirGesturesState: Bool) {
         print("Tap is in Air Gesture State: \(isInAirGesturesState)")
     }
-    
-    
 }
-
-
-

@@ -39,8 +39,8 @@ class TAPKitCentral : NSObject {
     }
     
     private func setupObservers() -> Void {
-        NotificationCenter.default.addObserver(self, selector: #selector(appDidBecomeActive(notification:)), name: NSNotification.Name.UIApplicationDidBecomeActive, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(appWillResignActive(notification:)), name: NSNotification.Name.UIApplicationWillResignActive, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(appDidBecomeActive(notification:)), name: UIApplication.didBecomeActiveNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(appWillResignActive(notification:)), name: UIApplication.willResignActiveNotification, object: nil)
 //        NotificationCenter.default.addObserver(self, selector: #selector(appWillTerminate(notification:)), name: NSNotification.Name.UIApplicationWillTerminate, object: nil)
         
     }
@@ -128,7 +128,7 @@ class TAPKitCentral : NSObject {
     }
     
     private func tapIndex(_ peripheral:CBPeripheral) -> Set<TAPDevice>.Index? {
-        return self.taps.index(where: { $0.identifier == peripheral.identifier})
+        return self.taps.firstIndex(where: { $0.identifier == peripheral.identifier})
     }
     
     private func isNewPeripheral(_ peripheral:CBPeripheral) -> Bool {
@@ -191,7 +191,7 @@ extension TAPKitCentral : CBCentralManagerDelegate {
 
 extension TAPKitCentral : TAPDeviceDelegate {
     func TAPIsReady(identifier: String, name: String, fw:Int) {
-        if let index = self.taps.index(where: { $0.identifier.uuidString == identifier }) {
+        if let index = self.taps.firstIndex(where: { $0.identifier.uuidString == identifier }) {
             if self.appActive {
                 self.taps[index].setNewMode(self.defaultInputMode)
                 self.taps[index].writeMode()
@@ -206,7 +206,7 @@ extension TAPKitCentral : TAPDeviceDelegate {
     
     func TAPFailed(identifier: String, name: String) {
         self.delegatesController.tapFailedToConnect(withIdentifier: identifier, name: name)
-        if let index = self.taps.index(where: { $0.identifier.uuidString == identifier}) {
+        if let index = self.taps.firstIndex(where: { $0.identifier.uuidString == identifier}) {
             self.taps.remove(at: index)
         }
     }
@@ -261,7 +261,7 @@ extension TAPKitCentral {
     private func performTAPAction(on identifiers:[String]?, action:((TAPDevice)->Void)) -> Void {
         if let ids = identifiers {
             ids.forEach({ identifier in
-                if let index = self.taps.index(where: { tapdevice in
+                if let index = self.taps.firstIndex(where: { tapdevice in
                     tapdevice.identifier.uuidString == identifier
                 }) {
                     action(self.taps[index])
@@ -300,7 +300,7 @@ extension TAPKitCentral {
     }
     
     func getTAPInputMode(forTapIdentifier identifier:String) -> TAPInputMode? {
-        if let index = self.taps.index(where: { $0.identifier.uuidString == identifier }) {
+        if let index = self.taps.firstIndex(where: { $0.identifier.uuidString == identifier }) {
             return self.taps[index].mode
         }
         return nil

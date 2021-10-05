@@ -60,7 +60,11 @@ import Foundation
     }
     
     @objc public static func toFingers(_ combination:UInt8) -> [Bool] {
-        return [combination & 0b00001 > 0, combination & 0b00010 > 0, combination & 0b00100 > 0, combination & 0b01000 > 0, combination & 0b10000 > 0]
+        return [combination & 0b00001 > 0, 
+				combination & 0b00010 > 0, 
+				combination & 0b00100 > 0, 
+				combination & 0b01000 > 0, 
+				combination & 0b10000 > 0]
     }
     
     @objc public static func fingerName(_ finger:Int) -> String {
