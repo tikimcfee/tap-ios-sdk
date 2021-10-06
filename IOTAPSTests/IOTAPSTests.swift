@@ -54,7 +54,7 @@ class TestingTaps: XCTestCase {
 	}
 	
 	func testSensorState() throws {
-		let sensorState = RawSensorState()
+		
 	}
 	
 }

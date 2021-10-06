@@ -41,12 +41,38 @@ class RawSensorState {
 	private var imuPositions: [IMU: LList<Point3>] = [:]
 	private var addQueue = DispatchQueue(label: "RawSensorInput", qos: .userInitiated)
 	
+	init() {
+		Fingers.allCases.forEach { _ = fingerList($0) }
+		IMU.allCases.forEach { _ = imuList($0) }
+	}
+	
 	func update(data: RawSensorData) {
 		addQueue.async { [data] in
 			self.doUpdate(data)
 		}
 	}
 	
+	private func doUpdate(_ data: RawSensorData) { 
+		switch data.type {
+			case .Device:
+				Fingers.allCases.forEach {
+					if let rawPoint = data.getPoint(for: $0.rawSensorID) {
+						fingerList($0).append(rawPoint)
+					}
+				}
+			case .IMU:
+				IMU.allCases.forEach {
+					if let rawPoint = data.getPoint(for: $0.rawIMUID) {
+						imuList($0).append(rawPoint)
+					}
+				}
+			case .None:
+				break
+		}
+	}
+}
+
+extension RawSensorState {
 	func readFingers(_ reader: (Fingers, Point3) -> Void) {
 		Fingers.allCases.forEach { finger in
 			fingerPositions[finger]?.forEach { pointPosition in 
@@ -76,27 +102,16 @@ class RawSensorState {
 			reader(imu, iterator)
 		}
 	}
+
+	private func fingerList(_ finger: Fingers) -> LList<Point3> {
+		let list = fingerPositions[finger] ?? LList()
+		fingerPositions[finger] = list
+		return list
+	}
 	
-	private func doUpdate(_ data: RawSensorData) { 
-		switch data.type {
-			case .Device:
-				Fingers.allCases.forEach {
-					if let rawPoint = data.getPoint(for: $0.rawSensorID) {
-						let list = fingerPositions[$0] ?? LList()
-						list.append(rawPoint)
-						fingerPositions[$0] = list
-					}
-				}
-			case .IMU:
-				IMU.allCases.forEach {
-					if let rawPoint = data.getPoint(for: $0.rawIMUID) {
-						let list = imuPositions[$0] ?? LList()
-						list.append(rawPoint)
-						imuPositions[$0] = list
-					}
-				}
-			case .None:
-				break
-		}
+	private func imuList(_ imu: IMU) -> LList<Point3> {
+		let list = imuPositions[imu] ?? LList()
+		imuPositions[imu] = list
+		return list
 	}
 }
