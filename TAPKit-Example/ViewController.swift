@@ -85,6 +85,7 @@ class ViewController: UIViewController {
 		stack.addArrangedSubview(buttonSetModeToRaw())
 		stack.addArrangedSubview(buttonSetModeToKeyboard())
 		stack.addArrangedSubview(buttonSetModeToController())
+		stack.addArrangedSubview(buttonSetModeToControllerMouseHID())
 		stack.arrangedSubviews.forEach { button in 
 			NSLayoutConstraint.activate([
 				button.leadingAnchor.constraint(equalTo: stack.leadingAnchor, constant: 4.0),
@@ -108,7 +109,7 @@ class ViewController: UIViewController {
 	
 	private func buttonSetModeToKeyboard() -> UIButton {
 		let button = UIButton()
-		button.setTitle("Set to Keyboard", for: .normal)
+		button.setTitle("Set to Keyboard ('text')", for: .normal)
 		button.setTitleColor(.black, for: .normal)
 		button.addTarget(self, action: #selector(onButtonSetToKeyboardTapped), for: .touchUpInside)
 		return button
@@ -122,13 +123,24 @@ class ViewController: UIViewController {
 		return button
 	}
 	
+	private func buttonSetModeToControllerMouseHID() -> UIButton {
+		let button = UIButton()
+		button.setTitle("Set to Controller with Mouse HID", for: .normal)
+		button.setTitleColor(.black, for: .normal)
+		button.addTarget(self, action: #selector(onButtonSetToControllerMouseHIDTapped), for: .touchUpInside)
+		return button
+	}
+	
 	@objc func onButtonSetToRawTapped() {
+//		let inputMode = TAPInputMode.rawSensor(
+//			sensitivity: TAPRawSensorSensitivity(
+//				deviceAccelerometer: 1, 
+//				imuGyro: 1, 
+//				imuAccelerometer: 1
+//			)
+//		)
 		let inputMode = TAPInputMode.rawSensor(
-			sensitivity: TAPRawSensorSensitivity(
-				deviceAccelerometer: 1, 
-				imuGyro: 1, 
-				imuAccelerometer: 1
-			)
+			sensitivity: TAPRawSensorSensitivity()
 		)
 		TAPKit.sharedKit.setDefaultTAPInputMode(inputMode, immediate: true)
 	}
@@ -139,6 +151,11 @@ class ViewController: UIViewController {
 	}
 	
 	@objc func onButtonSetToControllerTapped() {
+		let inputMode = TAPInputMode.controller()
+		TAPKit.sharedKit.setDefaultTAPInputMode(inputMode, immediate: true)
+	}
+	
+	@objc func onButtonSetToControllerMouseHIDTapped() {
 		let inputMode = TAPInputMode.controllerWithMouseHID()
 		TAPKit.sharedKit.setDefaultTAPInputMode(inputMode, immediate: true)
 	}

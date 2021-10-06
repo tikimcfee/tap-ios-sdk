@@ -41,11 +41,11 @@ extension AppFiles {
 	}
 	
 	public static var fingerDataFile: URL {
-		file(named: "fingerfiles.raw", in: dataDirectory)
+		file(named: "fingerfiles.text", in: dataDirectory)
 	}
 	
 	public static var imuDataFile: URL {
-		file(named: "imufiles.raw", in: dataDirectory)
+		file(named: "imufiles.text", in: dataDirectory)
 	}
 }
 

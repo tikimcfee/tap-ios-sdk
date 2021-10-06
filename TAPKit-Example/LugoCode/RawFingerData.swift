@@ -21,7 +21,7 @@ extension Fingers {
 	}
 }
 
-enum IMU: CaseIterable {
+enum IMU: String, CaseIterable {
 	case gyro
 	case accelerometer
 	
@@ -91,15 +91,13 @@ extension RawSensorState {
 	
 	func makeFingerIterators(_ reader: (Fingers, LList<Point3>.Iterator) -> Void) {
 		Fingers.allCases.forEach { finger in
-			let iterator = (fingerPositions[finger] ?? LList()).makeIterator()
-			reader(finger, iterator)
+			reader(finger, fingerList(finger).makeIterator())
 		}
 	}
 	
 	func makeIMUIterators(_ reader: (IMU, LList<Point3>.Iterator) -> Void) {
 		IMU.allCases.forEach { imu in
-			let iterator = (imuPositions[imu] ?? LList()).makeIterator()
-			reader(imu, iterator)
+			reader(imu, imuList(imu).makeIterator())
 		}
 	}
 

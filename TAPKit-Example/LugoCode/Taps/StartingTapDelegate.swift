@@ -19,6 +19,7 @@ class StartingTapDelegate: TAPKitDelegate {
 	private let raw = RawSensorState()
 	private let fileQueue = DispatchQueue(label: "RawDataWriter", qos: .background)
 	private let fingerDirectStore = DirectAppendFileStore(flatFile: AppFiles.fingerDataFile)
+	private let imuDirectStore = DirectAppendFileStore(flatFile: AppFiles.imuDataFile)
 	
 	private lazy var fingerIterators: [Fingers: PointIterator] = {
 		var iterators = [Fingers: PointIterator]()
@@ -28,6 +29,13 @@ class StartingTapDelegate: TAPKitDelegate {
 		return iterators
 	}()
 	
+	private lazy var imuIterators: [IMU: PointIterator] = {
+		var iterators = [IMU: PointIterator]()
+		raw.makeIMUIterators { imu, iterator in 
+			iterators[imu] = iterator
+		}
+		return iterators
+	}()
 	
 	func centralBluetoothState(poweredOn: Bool) {
 		print("Bluetooth state changed: powerxeeaaareedOn=\(poweredOn)")
@@ -65,6 +73,7 @@ class StartingTapDelegate: TAPKitDelegate {
 	
 	func rawSensorDataReceived(identifier: String, data: RawSensorData) {
 		raw.update(data: data)
+		updateRawFiles()
 	}
 	
 	private func updateRawFiles() {
@@ -72,11 +81,20 @@ class StartingTapDelegate: TAPKitDelegate {
 			Fingers.allCases.forEach { finger in
 				var iterator = self.fingerIterators[finger]
 				while let point = iterator?.next() {
-					let newLine = "\(finger.rawValue) \(point.x) \(point.y) \(point.z)"
+					let newLine = "\(finger.rawValue) \(point.x) \(point.y) \(point.z)\n"
 					print(newLine)
-					self.fingerDirectStore.appendText(newLine)
+//					self.fingerDirectStore.appendText(newLine)
 				}
 				self.fingerIterators[finger] = iterator // need to reset iterator to keep state
+			}
+			IMU.allCases.forEach { imu in
+				var iterator = self.imuIterators[imu]
+				while let point = iterator?.next() {
+					let newLine = "\(imu.rawValue) \(point.x) \(point.y) \(point.z)\n"
+					print(newLine)
+//					self.imuDirectStore.appendText(newLine)
+				}
+				self.imuIterators[imu] = iterator // need to reset iterator to keep state
 			}
 		}
 	}
