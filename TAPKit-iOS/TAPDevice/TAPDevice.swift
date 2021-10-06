@@ -9,7 +9,7 @@
 import Foundation
 import CoreBluetooth
 
-protocol TAPDeviceDelegate : class {
+protocol TAPDeviceDelegate : AnyObject {
     func TAPIsReady(identifier:String, name:String, fw:Int)
     func TAPtapped(identifier:String, combination:UInt8)
     func TAPMoused(identifier:String, vX:Int16, vY:Int16, isMouse:Bool)
@@ -155,7 +155,7 @@ class TAPDevice : NSObject {
                 for i in 0..<min(18,durations.count) {
                     bytes[i+2] = UInt8( Double(durations[i])/10.0)
                 }
-                let data = Data.init(bytes: bytes)
+                let data = Data(bytes)
                 peripheral.writeValue(data, for: ch, type: .withoutResponse)
 
             }
@@ -166,7 +166,7 @@ class TAPDevice : NSObject {
             if self.peripheral.state == .connected {
                 var bytes = [UInt8].init(repeating: 0, count: 20)
                 bytes[0] = 13
-                let data = Data.init(bytes: bytes)
+                let data = Data(bytes)
                 peripheral.writeValue(data, for: ch, type: .withoutResponse)
             }
         }
