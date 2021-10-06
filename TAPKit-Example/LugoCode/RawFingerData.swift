@@ -73,10 +73,5 @@ class RawSensorState {
 			case .None:
 				break
 		}
-		
-		let list = LList<String>()
-		list.forEach { 
-			$0.element
-		}
 	}
 }

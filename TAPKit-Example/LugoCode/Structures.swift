@@ -10,42 +10,43 @@ import Foundation
 
 class LList<NodeValue>: Sequence {
 	typealias Node = LNode<NodeValue>
+
+	private var head: Node?
+	private var tail: Node?
 	
-	struct Iterator: IteratorProtocol {
-		var pointer: Node?
-		mutating func next() -> Node? {
-			let thisValue = pointer
-			pointer = pointer?.next
-			return thisValue
+	func append(_ value: NodeValue) {
+		listAppend(LNode(value))
+	}
+	
+	private func listAppend(_ node: Node) {
+		if head == nil {
+			head = node
 		}
-	}
-	
-	var head: Node?
-	var tail: Node?
-	
-	func reset(initialNode: Node?) {
-		head = initialNode
-		tail = initialNode
-	}
-	
-	func append(_ node: Node) {
 		tail?.next = node
 		tail = node
 	}
 	
-	func iterate() -> Iterator {
-		Iterator(pointer: head)
+	func makeIterator() -> LLIterator {
+		LLIterator(pointer: head)
 	}
-	
-	func makeIterator() -> Iterator {
-		Iterator(pointer: head)
+}
+
+extension LList {
+	struct LLIterator: IteratorProtocol {
+		var pointer: Node?
+		mutating func next() -> NodeValue? {
+			let thisValue = pointer
+			pointer = pointer?.next
+			return thisValue?.element
+		}
 	}
 }
 
 class LNode<Element> {
 	typealias Node = LNode<Element>
-	
-	var head: Element?
 	var element: Element?
 	var next: Node?
+	init(_ element: Element) {
+		self.element = element
+	}
 }

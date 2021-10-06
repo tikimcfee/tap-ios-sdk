@@ -19,9 +19,19 @@ class TestingTaps: XCTestCase {
 		
 	}
 	
-	func testThings() {
-		let x: RawSensorState
+	func testLinkedList() throws {
+		let testStrings = ["hello", "one", "two", "three", "four"]
 		
+		let list = LList<String>()
+		testStrings.forEach {
+			list.append($0)
+		}
+		
+		let readBackList = list.map { $0 }
+		XCTAssertEqual(testStrings, readBackList, "Lists did not match")
+		
+		let readBackListAgain = list.map { $0 }
+		XCTAssertEqual(testStrings, readBackListAgain, "Lists did not match on second read")
 	}
 	
 }
