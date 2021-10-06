@@ -14,6 +14,11 @@ class LList<NodeValue>: Sequence {
 	private var head: Node?
 	private var tail: Node?
 	
+	func removeAll() {
+		head = nil
+		tail = nil
+	}
+	
 	func append(_ value: NodeValue) {
 		listAppend(LNode(value))
 	}
@@ -34,10 +39,21 @@ class LList<NodeValue>: Sequence {
 extension LList {
 	struct LLIterator: IteratorProtocol {
 		var pointer: Node?
+		var lastNodeOnEmpty: Node?
+		
 		mutating func next() -> NodeValue? {
-			let thisValue = pointer
+			if pointer == nil && lastNodeOnEmpty?.next != nil {
+				pointer = lastNodeOnEmpty?.next
+				lastNodeOnEmpty = nil
+			}
+			if let pointer = pointer, pointer.next == nil {
+				lastNodeOnEmpty = pointer
+			}
+			
+			let currentNode = pointer
 			pointer = pointer?.next
-			return thisValue?.element
+			
+			return currentNode?.element
 		}
 	}
 }
